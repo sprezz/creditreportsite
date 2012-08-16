@@ -32,4 +32,8 @@ def blocked_zip_codes():
 def date_times():
     pass
 
-f = filter()
+try:
+    can_save_cookies.count += 1
+except AttributeError:
+    can_save_cookies.count = 0
+print(can_save_cookies.count)
