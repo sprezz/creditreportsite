@@ -96,9 +96,9 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+#    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'creditreportsite.urls'
@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'creditreportsite.app1',
+    'creditreportsite.website',
 )
 
 # A sample logging configuration. The only tangible logging
