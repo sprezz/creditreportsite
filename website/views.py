@@ -48,8 +48,9 @@ allowed_country = ['us']
 def legitimate_visitor(ip, geo_data, v):
     visits = Visitor.objects.filter(ip=ip)
     print(visits)
-    if visits:
-        return 'more than 1 visit'
+    number_of_visits = len(visits)
+    if number_of_visits:
+        return 'visted %s times' % number_of_visits
     if geo_data['city'].lower() in cities:
         return 'city'
     if geo_data['region_name'].lower() in states:
