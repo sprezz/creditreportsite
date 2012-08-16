@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from app1.views import hello, current_datetime, hours_ahead, blah
-from website.views import get_landing_page
+from website.views import get_landing_page, ip_details
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^time/plus/(\d{1,2})/$', hours_ahead),
     url('^creditreport/(\w+)/$', get_landing_page),
     url('^creditreport/(\w+)/(\w+)/$', get_landing_page),
+    url('^ipdetails', ip_details)
 
 )
 
