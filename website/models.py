@@ -21,3 +21,17 @@ class Keyword(models.Model):
         x = '<img src="%s" />' % self.image.url
         return x
     logo.allow_tags = True
+
+class Visitor(models.Model):
+    ip = models.CharField(max_length = 20)
+    ua = models.CharField(max_length = 100)
+    keyword = models.CharField(max_length = 20)
+    text = models.CharField(max_length = 20)
+    lp = models.CharField(max_length = 20)
+    visit_datetime = models.DateTimeField()
+    city = models.CharField(max_length = 20)
+    state = models.CharField(max_length = 20)
+    county_code = models.CharField(max_length = 20)
+    zip_code = models.CharField(max_length = 20)
+    cloaked = models.BooleanField()
+    reason = models.CharField(max_length=30)
