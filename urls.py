@@ -22,8 +22,12 @@ urlpatterns = patterns('',
     url('^time/$', current_datetime),
     url(r'^time/plus/(\d{1,2})/$', hours_ahead),
     url('^creditreport/(\w+)/$', get_landing_page),
-    url('^creditreport/(\w+)/(\w+)/', get_landing_page),
+    url('^creditreport/(\w+)/(\w+)/$', get_landing_page),
 
-#    url(r'^media/images/(?P<path>.*)$', 'django.views.static.serve',
-#    {'document_root': settings.MEDIA_ROOT}),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
