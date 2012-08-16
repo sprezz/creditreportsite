@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^time/plus/(\d{1,2})/$', hours_ahead),
     url('^creditreport/(\w+)/$', get_landing_page),
     url('^creditreport/(\w+)/(\w+)/$', get_landing_page),
+    url('^creditreport/(\w+)/(\w+)/index.html$', get_landing_page),
     url('^ipdetails', ip_details)
 
 )
