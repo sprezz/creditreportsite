@@ -24,6 +24,6 @@ urlpatterns = patterns('',
     url('^creditreport/(\w+)/$', get_landing_page),
     url('^creditreport/(\w+)/(\w+)/', get_landing_page),
 
-    url(r'^media/images/(?P<path>.*)$', 'django.views.static.serve',
-    {'document_root': settings.MEDIA_ROOT}),
+#    url(r'^media/images/(?P<path>.*)$', 'django.views.static.serve',
+#    {'document_root': settings.MEDIA_ROOT}),
 )
