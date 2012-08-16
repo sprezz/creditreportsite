@@ -148,4 +148,6 @@ LOGGING = {
     }
 }
 
+GEOIP_DB_PATH = os.path.join(PROJECT_ROOT, 'GeoLiteCity.dat')
+
 from settings_local import *
