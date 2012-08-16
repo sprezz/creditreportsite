@@ -31,7 +31,8 @@ class Visitor(models.Model):
     visit_datetime = models.DateTimeField()
     city = models.CharField(max_length = 20)
     state = models.CharField(max_length = 20)
-    county_code = models.CharField(max_length = 20)
+    country_code = models.CharField(max_length = 20)
     zip_code = models.CharField(max_length = 20)
     cloaked = models.BooleanField()
     reason = models.CharField(max_length=30)
+

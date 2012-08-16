@@ -76,10 +76,11 @@ def save_visitor(request, keyword, lp):
     v.county_code = geo_data['country_code']
     v.zip_code = geo_data['postal_code']
     print(legitimate_visitor(v.ip, geo_data, v))
-    if not legitimate_visitor(v.ip, geo_data, v):
-        v.cloaked = False #no need to cloak
-    else:
+    v.reason = legitimate_visitor(v.ip, geo_data, v)
+    if v.reason: #Reason to cloak
         v.cloaked = True
+    else:
+        v.cloaked = False #no need to cloak
         print('Cloaking needed')
     v.save()
     return v
