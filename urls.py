@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from app1.views import hello, current_datetime, hours_ahead, blah
 from website.views import get_landing_page
-from settings_local import MEDIA_ROOT
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -25,5 +25,5 @@ urlpatterns = patterns('',
     url('^creditreport/(\w+)/(\w+)/', get_landing_page),
 
     url(r'^media/images/(?P<path>.*)$', 'django.views.static.serve',
-    {'document_root': MEDIA_ROOT}),
+    {'document_root': settings.MEDIA_ROOT}),
 )
