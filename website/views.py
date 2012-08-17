@@ -48,7 +48,7 @@ organizations = ['softlayer',
 cities = [#'dallas',
           'irvine',
           'los angeles']
-states = ['california',]
+states = ['california','ca']
 allowed_country = ['us']
 
 def legitimate_visitor(ip, geo_data, v):
