@@ -45,10 +45,10 @@ bad_ips = [#'208.43.90.178',
 organizations = ['softlayer',
                  'liquidweb']
 
-cities = [#'dallas',
+cities = ['dallas',
           'irvine',
           'los angeles']
-states = ['california','ca','tx']
+states = ['']
 allowed_country = ['us']
 
 def legitimate_visitor(ip, geo_data, v):
