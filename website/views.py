@@ -72,10 +72,10 @@ def save_visitor(request, keyword, lp):
     v.lp = lp
     v.dt = datetime.datetime.now()
     geo_data = geoip.record_by_addr(v.ip)
-    v.city = geo_data['city']
-    v.state = geo_data['region_name']
-    v.country_code = geo_data['country_code']
-    v.zip_code = geo_data['postal_code']
+    v.city = geo_data.get('city','').lower()
+    v.state = geo_data.get('region_name','')
+    v.country_code = geo_data.get('country_code','')
+    v.zip_code = geo_data.get('postal_code','')
     print(legitimate_visitor(v.ip, geo_data, v))
     v.reason = legitimate_visitor(v.ip, geo_data, v)
     if v.reason: #Reason to cloak
