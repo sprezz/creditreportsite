@@ -36,3 +36,5 @@ class Visitor(models.Model):
     cloaked = models.BooleanField()
     reason = models.CharField(max_length=30, null=True, blank=True)
 
+    class Meta:
+        ordering = ['-visit_datetime']
