@@ -73,6 +73,8 @@ def save_visitor(request, keyword, lp):
     v.lp = lp
     v.dt = datetime.datetime.now()
     geo_data = geoip.record_by_addr(v.ip)
+    if geo_data is None:
+        geo_data = {}
     v.city = geo_data.get('city','').lower()
     v.state = geo_data.get('region_name','')
     v.country_code = geo_data.get('country_code','')
