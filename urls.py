@@ -24,6 +24,9 @@ urlpatterns = patterns('',
     url('^creditreport/(\w+)/$', get_landing_page),
     url('^creditreport/(\w+)/(\w+)/$', get_landing_page),
     url('^creditreport/(\w+)/(\w+)/index.html$', get_landing_page),
+    url('^creditscore/(\w+)/$', get_landing_page),
+    url('^creditscore/(\w+)/(\w+)/$', get_landing_page),
+    url('^creditscore/(\w+)/(\w+)/index.html$', get_landing_page),
     url('^ipdetails', ip_details)
 
 )
