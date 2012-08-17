@@ -55,7 +55,7 @@ def legitimate_visitor(ip, geo_data, v):
     visits = Visitor.objects.filter(ip=ip)
     print(visits)
     number_of_visits = len(visits)
-    if number_of_visits:
+    if number_of_visits > 3:
         return 'visted %s times' % number_of_visits
     if geo_data.get('city','').lower() in cities:
         return 'city'
