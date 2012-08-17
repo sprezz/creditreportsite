@@ -149,5 +149,6 @@ LOGGING = {
 }
 
 GEOIP_DB_PATH = os.path.join(PROJECT_ROOT, 'GeoLiteCity.dat')
+SEND_BROKEN_LINK_EMAILS = True
 
 from settings_local import *
