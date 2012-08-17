@@ -7,7 +7,7 @@ class KeywordAdmin(admin.ModelAdmin):
 
 class VisitorAdmin(admin.ModelAdmin):
     list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'reason')
-    search_fields = ['ip','city','state','country']
+    search_fields = ['ip','city','state','country_code','ua']
     ordering = ('-visit_datetime',)
 
 admin.site.register(Visitor, VisitorAdmin)
