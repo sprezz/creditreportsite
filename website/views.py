@@ -52,11 +52,11 @@ def legitimate_visitor(ip, geo_data, v):
     number_of_visits = len(visits)
     if number_of_visits:
         return 'visted %s times' % number_of_visits
-    if geo_data['city'].lower() in cities:
+    if geo_data.get('city','').lower() in cities:
         return 'city'
-    if geo_data['region_name'].lower() in states:
+    if geo_data.get('region_name','').lower() in states:
         return 'region_name'
-    if not geo_data['country_code'].lower() in allowed_country:
+    if not geo_data.get('country_code','').lower() in allowed_country:
         return 'country_code'
     if ip in bad_ips:
         return 'ip'
@@ -74,7 +74,7 @@ def save_visitor(request, keyword, lp):
     geo_data = geoip.record_by_addr(v.ip)
     v.city = geo_data['city']
     v.state = geo_data['region_name']
-    v.county_code = geo_data['country_code']
+    v.country_code = geo_data['country_code']
     v.zip_code = geo_data['postal_code']
     print(legitimate_visitor(v.ip, geo_data, v))
     v.reason = legitimate_visitor(v.ip, geo_data, v)
