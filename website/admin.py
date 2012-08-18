@@ -9,6 +9,7 @@ class VisitorAdmin(admin.ModelAdmin):
     list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'reason')
     search_fields = ['ip','city','state','country_code','ua']
     ordering = ('-visit_datetime',)
+    list_filter = ['reason', ]
 
 admin.site.register(Visitor, VisitorAdmin)
 admin.site.register(LandingPage)
