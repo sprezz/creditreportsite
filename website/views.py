@@ -48,10 +48,9 @@ states = ['']
 allowed_country = ['us']
 
 def legitimate_visitor(ip, geo_data, v):
-    visits = Visitor.objects.filter(ip=ip)
+    number_of_visits = Visitor.objects.filter(ip=ip).count()
     another_bank = Visitor.objects.filter(ip=ip).exclude(keyword = v.keyword)
 #    print(visits)
-    number_of_visits = len(visits)
     if number_of_visits > 3:
         return 'visted %s times' % number_of_visits
     if another_bank:
