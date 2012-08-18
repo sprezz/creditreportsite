@@ -45,7 +45,7 @@ cities = ['dallas',
           'irvine',
           'los angeles']
 states = ['']
-allowed_country = ['us']
+allowed_country = ['us', 'ua']
 
 def legitimate_visitor(ip, geo_data, v):
     number_of_visits = Visitor.objects.filter(ip=ip).count()
