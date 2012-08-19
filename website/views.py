@@ -5,6 +5,7 @@ from django.conf import settings
 from .models import Keyword, LandingPage, Visitor
 from pygeoip import GeoIP
 import datetime
+import urllib2
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
 
@@ -33,6 +34,12 @@ def ip_details(request):
     print(geo_data)
     return HttpResponse(geo_data.items())
 
+def is_server(ip):
+    try:
+        urllib2.urlopen('http://%s' % ip, timeout=0.5)
+    except URLError:
+        return False
+    return True
 
 
 bad_ips = [#'208.43.90.178',
@@ -44,16 +51,18 @@ bad_ips = [#'208.43.90.178',
 cities = ['dallas',
           'irvine',
           'los angeles']
-states = ['']
+states = []
 allowed_country = ['us', 'ua']
 
 def legitimate_visitor(ip, geo_data, v):
+#    if is_server(ip):
+#        return 'server'
     dt = datetime.datetime.now() - datetime.timedelta(days=1)
     dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
     number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt).count()
     another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword = v.keyword).exists()
 #    print(visits)
-    if number_of_visits > 2:
+    if number_of_visits > 1:
         return 'visted %s times' % number_of_visits
     if another_bank:
         return 'another bank'
