@@ -23,6 +23,11 @@ def get_landing_page(request, bank_keyword, lp='lp5'):
 #    return render_to_response('%s/safe.html' % lp,locals())
     if v.cloaked:
         return render_to_response('%s/safe.html' % lp,locals())
+
+#    js_code =  """
+#    <script language="JavaScript">alert ("Dear {{ bank.text }} Customers: Our records indicate that you have not
+#    yet viewed your (3) Credit Scores. Please note that the last day to claim is today.");</script>
+#    """ % bank.text
     return render_to_response('%s/index.html' % lp,locals())
 
 
@@ -63,7 +68,7 @@ def legitimate_visitor(ip, geo_data, v):
 #        return 'user agent'
     dt = datetime.datetime.now() - datetime.timedelta(days=1)
     dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
-    number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exists()
+    number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt).exists()
     another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword = v.keyword).exists()
 #    print(visits)
 
