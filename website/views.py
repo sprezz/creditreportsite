@@ -68,7 +68,7 @@ def legitimate_visitor(ip, geo_data, v):
         return 'ip'
 #    if 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1' in v.ua:
 #        return 'user agent'
-    dt = datetime.datetime.now() - datetime.timedelta(days=1)
+    dt = datetime.datetime.now() - datetime.timedelta(hours=15)
     dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
     number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt).exists()
     another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword = v.keyword).exists()
