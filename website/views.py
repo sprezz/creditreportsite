@@ -3,7 +3,7 @@
 from django.shortcuts import render_to_response, HttpResponse
 from django.conf import settings
 from .models import Keyword, LandingPage, Visitor
-from pygeoip import GeoIP
+from pygeoip import GeoIP, GeoIPError
 import datetime
 import urllib2
 
@@ -94,11 +94,17 @@ def save_visitor(request, keyword, lp):
     v.visit_datetime = datetime.datetime.now()
     v.ip = request.META.get('HTTP_X_REAL_IP', '')
     v.ua = request.META['HTTP_USER_AGENT'][:100]
-#    v.text = request.META.get('HTTP_REFERER')[:10]
+    v.referer = request.META.get('HTTP_REFERER')
+    if v.referer:
+        v.referer = v.referer[:20]
+        v.text = v.referer
     v.keyword = keyword
     v.lp = lp
     v.dt = datetime.datetime.now()
-    geo_data = geoip.record_by_addr(v.ip)
+    try:
+        geo_data = geoip.record_by_addr(v.ip)
+    except GeoIPError:
+        geo_data = geoip.record_by_addr('192.168.1.1')
     if geo_data is None:
         geo_data = {}
     v.city = geo_data.get('city','').lower()
