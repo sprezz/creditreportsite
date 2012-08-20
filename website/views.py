@@ -70,11 +70,11 @@ def legitimate_visitor(ip, geo_data, v):
 #        return 'user agent'
     dt = datetime.datetime.now() - datetime.timedelta(days=1)
     dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
-    number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt).exists()
+    number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt).count()
     another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword = v.keyword).exists()
 #    print(visits)
 
-    if number_of_visits:
+    if number_of_visits > 2:
         return 'visted already'
 #        return 'visted %s times' % number_of_visits
     if another_bank:
