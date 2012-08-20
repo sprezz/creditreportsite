@@ -94,7 +94,7 @@ def save_visitor(request, keyword, lp):
     v.visit_datetime = datetime.datetime.now()
     v.ip = request.META.get('HTTP_X_REAL_IP', '')
     v.ua = request.META['HTTP_USER_AGENT'][:100]
-    v.referer = request.META.get('HTTP_REFERER')
+    v.text = request.META.get('HTTP_REFERER')
     v.keyword = keyword
     v.lp = lp
     v.dt = datetime.datetime.now()
