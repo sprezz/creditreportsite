@@ -53,15 +53,16 @@ bad_ips = [#'208.43.90.178',
            ]
 
 #USE ONLY LOWERCASE
-cities = ['dallas',
+cities = [#'dallas',
           'irvine',
-          'los angeles']
+          #'los angeles',
+          ]
 states = []
 allowed_country = ['us', 'ua']
 
 def legitimate_visitor(ip, geo_data, v):
-    if v.referer:
-        return 'referer has value'
+#    if v.referer:
+#        return 'referer has value'
 #    if is_server(ip):
 #        return 'server'
     if ip in bad_ips:
