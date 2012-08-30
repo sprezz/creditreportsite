@@ -19,7 +19,7 @@ def generate_subid():
 def get_landing_page(request, bank_keyword, lp='lp5'):
     subid = generate_subid()
     v = save_visitor(request, bank_keyword, lp)
-    v.subid = subid
+    v.text = subid
     v.save()
     return HttpResponseRedirect('/s/%s/' % subid)
 
@@ -107,7 +107,6 @@ def legitimate_visitor(ip, geo_data, v):
 
 def save_visitor(request, keyword, lp):
     v = Visitor()
-    v.text = ''
     v.visit_datetime = datetime.datetime.now()
     v.ip = request.META.get('HTTP_X_REAL_IP', '')
     v.ua = request.META['HTTP_USER_AGENT'][:100]

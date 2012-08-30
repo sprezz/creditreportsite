@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     url('^cr/(\w+)/$', glp),
     url('^cr/(\w+)/(\w+)/$', glp),
     url('^cr/(\w+)/(\w+)/index.html$', glp),
+    #Unique subid
+    url('^s/(\w+)/$', unique_subid),
 
 
     url('^ipdetails', ip_details)
