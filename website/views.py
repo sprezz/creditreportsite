@@ -61,7 +61,7 @@ states = []
 allowed_country = ['us', 'ua']
 
 def legitimate_visitor(ip, geo_data, v):
-    if v.referer:
+    if v.referer and 'Chrome' not in v.ua:
         return 'referer has value'
 #    if is_server(ip):
 #        return 'server'
