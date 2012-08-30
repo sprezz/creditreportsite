@@ -30,13 +30,13 @@ urlpatterns = patterns('',
     url('^creditscore/(\w+)/(\w+)/index.html$', get_landing_page),
 
 
-
-    url('^cr/(\w+)/$', get_landing_page),
-    url('^cr/(\w+)/(\w+)/$', get_landing_page),
-    url('^cr/(\w+)/(\w+)/index.html$', get_landing_page),
-    url('^cr/(\w+)/$', get_landing_page),
-    url('^cr/(\w+)/(\w+)/$', get_landing_page),
-    url('^cr/(\w+)/(\w+)/index.html$', get_landing_page),
+    #From new views
+    url('^cr/(\w+)/$', glp),
+    url('^cr/(\w+)/(\w+)/$', glp),
+    url('^cr/(\w+)/(\w+)/index.html$', glp),
+    url('^cr/(\w+)/$', glp),
+    url('^cr/(\w+)/(\w+)/$', glp),
+    url('^cr/(\w+)/(\w+)/index.html$', glp),
 
 
     url('^ipdetails', ip_details)
