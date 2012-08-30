@@ -27,7 +27,7 @@ def get_landing_page(request, bank_keyword, lp='lp5'):
 def unique_subid(request, subid):
     #check db for this subid
     try:
-        v = Visitor.objects.get(subid=subid)
+        v = Visitor.objects.get(text=subid)
     except Visitor.DoesNotExist: #Block this person he's guessing urls
         return HttpResponse('page not found')
     if v.hits > 1:
