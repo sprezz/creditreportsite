@@ -12,7 +12,7 @@ class LandingPage(models.Model):
 
 
 class Keyword(models.Model):
-    keyword = models.CharField('bank keyword', max_length=10)
+    keyword = models.CharField('bank keyword', max_length=10, unique=True)
     image = models.ImageField('bank logo', upload_to='images')
     text = models.CharField('bank text', max_length=20)
     domain = models.CharField('bank domain', max_length=20)
@@ -25,10 +25,10 @@ class Keyword(models.Model):
 class Visitor(models.Model):
     ip = models.CharField(max_length = 20)
     ua = models.CharField(max_length = 100)
-    keyword = models.CharField(max_length = 20)
-    text = models.CharField(max_length = 20, null=True, blank=True)
+    keyword = models.ForeignKey(Keyword)
+    text = models.CharField(max_length=20, null=True, blank=True, db_index=True)  # Note the `db_index` parameter
     lp = models.CharField(max_length = 20, null=True, blank=True)
-    visit_datetime = models.DateTimeField()
+    visit_datetime = models.DateTimeField(db_index=True)
     city = models.CharField(max_length = 20, null=True, blank=True)
     state = models.CharField(max_length = 20, null=True, blank=True)
     country_code = models.CharField(max_length = 20, null=True, blank=True)

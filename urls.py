@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from app1.views import hello, current_datetime, hours_ahead, blah
 from website.views import get_landing_page, ip_details
-from website.newviews import get_landing_page as glp, unique_subid as usubid
+from website.newviews import landing_page as glp #, unique_subid as usubid
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -31,14 +31,11 @@ urlpatterns = patterns('',
 
 
     #From new views
-    url('^cr/(\w+)/$', glp),
-    url('^cr/(\w+)/(\w+)/$', glp),
-    url('^cr/(\w+)/(\w+)/index.html$', glp),
-    url('^cr/(\w+)/$', glp),
-    url('^cr/(\w+)/(\w+)/$', glp),
-    url('^cr/(\w+)/(\w+)/index.html$', glp),
+    url('^cr/(\w+)/$', 'website.newviews.landing_page'),
+    url('^cr/(\w+)/(\w+)/$', 'website.newviews.landing_page'),
+    url('^cr/(\w+)/(\w+)/index.html$', 'website.newviews.landing_page'),
     #Unique subid
-    url('^s/(\w+)/$', usubid),
+    url('^s/(\w+)/$', 'website.newviews.unique_subid'),
 
 
     url('^ipdetails', ip_details)

