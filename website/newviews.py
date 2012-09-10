@@ -75,7 +75,7 @@ def ip_details(request):
 def is_server(ip):
     try:
         urllib2.urlopen('http://%s' % ip, timeout=0.5)
-    except URLError:
+    except urllib2.URLError:
         return False
     return True
 
@@ -129,7 +129,7 @@ def save_visitor(request, keyword_text, lp):
     v.lp = lp
     v.dt = datetime.datetime.now()
     try:
-        geo_data = geoip.record_by_addr(v.ip)
+        geo_data = geoip.record_by_addr(str(v.ip))
     except GeoIPError:
         geo_data = geoip.record_by_addr('71.227.57.247')
     if geo_data is None:
