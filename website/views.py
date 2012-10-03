@@ -1,12 +1,14 @@
 import datetime
+import traceback
 
 from django.shortcuts import render_to_response, HttpResponse, HttpResponseRedirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from pygeoip import GeoIP, GeoIPError
+from django.core.mail import send_mail, mail_managers
 
 from website.models import Keyword, Visitor
-from website.helpers import generate_subid, legitimate_visitor
+from website.helpers import generate_subid, legitimate_visitor, get_client_ip
 
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
@@ -31,6 +33,7 @@ def unique_subid(request, subid):
         'v': visitor,
         'logo': visitor.keyword.image.url,
         'bank': visitor.keyword,
+        'subid': visitor.text,
     }
 
     if visitor.visit_datetime > day_ago:
@@ -93,3 +96,21 @@ def save_visitor(request, keyword_text, lp):
     v.save()
 
     return v
+
+
+def page500(request):
+    if not settings.DEBUG:
+        domain = request.get_host()
+        referer = request.META.get('HTTP_REFERER', None)
+
+        ua = request.META.get('HTTP_USER_AGENT', '<none>')
+        ip = request.META.get('REMOTE_ADDR', '<none>')
+        mail_managers("Server error on %s" % domain,
+            "Referrer: %s\nRequested URL: %s\nUser agent: %s\nIP address: %s\n\nTraceback:%s"\
+            % (referer, request.get_full_path(), ua, ip, traceback.format_exc()),
+            fail_silently=True)
+
+    response = render_to_response('500.html')
+    response.status_code = 500
+
+    return response
