@@ -56,7 +56,7 @@ def unique_subid(request, subid):
         'subid': visitor.text,
     }
 
-    if visitor.visit_datetime > day_ago:
+    if visitor.visit_datetime < day_ago:
         # One more visit, just showing safe page
         return render_to_response('%s/safe.html' % visitor.lp, context)
 
