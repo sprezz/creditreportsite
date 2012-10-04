@@ -3,26 +3,13 @@
     <head>
         <meta charset="utf-8">
         <title></title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript">
-            var width;
-            var height;
-            if (typeof window.innerWidth != 'undefined') {
-                width = window.innerWidth;
-                height = window.innerHeight;
-
-            } else if (typeof document.documentElement != 'undefined'
-                    && typeof document.documentElement.clientWidth !=
-                    'undefined' && document.documentElement.clientWidth != 0) {
-                width = document.documentElement.clientWidth;
-                height = document.documentElement.clientHeight;
-
-            } else {
-                width = document.getElementsByTagName('body')[0].clientWidth;
-                height = document.getElementsByTagName('body')[0].clientHeight;
-            }
+            var $window = $(window),
+                width = $window.width(),
+                height = $window.height();
 
             window.location = '{{ next }}?w='+width+'&h='+height;
-
         </script>
     </head>
     <body>
