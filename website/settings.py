@@ -13,7 +13,6 @@ CITIES = (
 )
 
 STATES = (
-    'ca',
 )
 
 ALLOWED_COUNTRY = (
