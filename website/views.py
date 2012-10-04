@@ -20,7 +20,13 @@ def landing_page(request, keyword, lp='lp5'):
     visitor.text = subid
     visitor.save()
 
-    return HttpResponseRedirect(reverse('website.views.unique_subid', args=[subid,]))
+    context = {
+        'subid': subid,
+        'next': reverse('website.views.unique_subid', args=[subid,]),
+    }
+
+    return render_to_response('lp.html', context)
+
 
 def unique_subid(request, subid):
 
@@ -28,6 +34,16 @@ def unique_subid(request, subid):
 
     ip = request.META.get('HTTP_X_REAL_IP', '')
     day_ago = datetime.datetime.now()-datetime.timedelta(days=1)
+
+    try:
+        visitor_width = int(request.GET.get('w'))
+    except (TypeError, ValueError):
+        visitor_width = None
+
+    try:
+        visitor_height = int(request.GET.get('h'))
+    except (TypeError, ValueError):
+        visitor_height = None
 
     context = {
         'v': visitor,

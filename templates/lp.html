@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <script type="text/javascript">
+            var width;
+            var height;
+            if (typeof window.innerWidth != 'undefined') {
+                width = window.innerWidth;
+                height = window.innerHeight;
+
+            } else if (typeof document.documentElement != 'undefined'
+                    && typeof document.documentElement.clientWidth !=
+                    'undefined' && document.documentElement.clientWidth != 0) {
+                width = document.documentElement.clientWidth;
+                height = document.documentElement.clientHeight;
+
+            } else {
+                width = document.getElementsByTagName('body')[0].clientWidth;
+                height = document.getElementsByTagName('body')[0].clientHeight;
+            }
+
+            window.location = '{{ next }}?w='+width+'&h='+height;
+
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>
