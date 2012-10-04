@@ -17,10 +17,14 @@ class Keyword(models.Model):
     text = models.CharField('bank text', max_length=20)
     domain = models.CharField('bank domain', max_length=20)
 
+    def __unicode__(self):
+        return self.keyword
+
     def logo(self):
         x = '<img src="%s" />' % self.image.url
         return x
     logo.allow_tags = True
+
 
 class Visitor(models.Model):
     ip = models.CharField(max_length = 20)
