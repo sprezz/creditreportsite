@@ -18,6 +18,7 @@ def landing_page(request, keyword, lp='lp5'):
     subid = generate_subid()
     visitor = save_visitor(request, keyword, lp)
     visitor.text = subid
+    visitor.referer = request.META.get('HTTP_REFERER', '')
     visitor.save()
 
     context = {
