@@ -18,9 +18,9 @@ urlpatterns = patterns('',
     url(r'^time/plus/(\d{1,2})/$', 'app1.views.hours_ahead'),
 
     #From new views
-    url('^cr/(\w+)/$', 'website.views.landing_page'),
-    url('^cr/(\w+)/(\w+)/$', 'website.views.landing_page'),
-    url('^cr/(\w+)/(\w+)/index.html$', 'website.views.landing_page'),
+    url('^(?:cr|creditscore|creditreport)/(\w+)/$', 'website.views.landing_page'),
+    url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/$', 'website.views.landing_page'),
+    url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/index.html$', 'website.views.landing_page'),
     #Unique subid
     url('^s/(\w+)/$', 'website.views.unique_subid'),
 
