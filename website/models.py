@@ -35,6 +35,7 @@ class Visitor(models.Model):
     zip_code = models.CharField(max_length = 20, null=True, blank=True)
     cloaked = models.BooleanField()
     reason = models.CharField(max_length=30, null=True, blank=True)
+    viewport = models.CharField(max_length=15, null=True, blank=True)
 
     class Meta:
         ordering = ['-visit_datetime']

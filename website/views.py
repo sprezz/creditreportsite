@@ -45,6 +45,9 @@ def unique_subid(request, subid):
     except (TypeError, ValueError):
         visitor_height = None
 
+    if visitor_width and visitor_height:
+        Visitor.objects.filter(id=visitor.pk).update(viewport='%s,%s' % (visitor_width, visitor_height))
+
     context = {
         'v': visitor,
         'logo': visitor.keyword.image.url,
