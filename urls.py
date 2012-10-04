@@ -5,8 +5,6 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
-handler500 = 'website.views.page500'
-
 urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
