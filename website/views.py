@@ -47,7 +47,7 @@ def unique_subid(request, subid):
         visitor_height = None
 
     if visitor_width and visitor_height:
-        Visitor.objects.filter(id=visitor.pk).update(viewport='%s,%s' % (visitor_width, visitor_height))
+        visitor.viewport='%s,%s' % (visitor_width, visitor_height)
 
     context = {
         'v': visitor,
@@ -57,6 +57,7 @@ def unique_subid(request, subid):
     }
 
     if visitor.visit_datetime < day_ago:
+        visitor.save()
         # One more visit, just showing safe page
         return render_to_response('%s/safe.html' % visitor.lp, context)
 
