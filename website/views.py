@@ -1,14 +1,14 @@
+import random
 import datetime
-import traceback
 
-from django.shortcuts import render_to_response, HttpResponse, HttpResponseRedirect, get_object_or_404
+from django.shortcuts import render_to_response, HttpResponse, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from pygeoip import GeoIP, GeoIPError
-from django.core.mail import send_mail, mail_managers
 
 from website.models import Keyword, Visitor
-from website.helpers import generate_subid, legitimate_visitor, get_client_ip
+from website.helpers import generate_subid, legitimate_visitor
+from website import settings as app_settings
 
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
@@ -54,6 +54,7 @@ def unique_subid(request, subid):
         'logo': visitor.keyword.image.url,
         'bank': visitor.keyword,
         'subid': visitor.text,
+        'redirect_link': random.choice(app_settings.REDIRECT_LINKS),
     }
 
     if visitor.visit_datetime < day_ago:
