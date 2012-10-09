@@ -23,9 +23,9 @@ def legitimate_visitor(ip, geo_data, v):
     if ip in app_settings.BAD_IPS:
         return 'ip'
 
-    dt = datetime.datetime.now() - datetime.timedelta(days=1)
+    dt3 = datetime.datetime.now() - datetime.timedelta(days=3)
     dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
-    number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exists()
+    number_of_visits = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt3).count() >= 3
     another_bank = Visitor.objects.filter(ip=ip, visit_datetime__gte=dt5).exclude(keyword=v.keyword_id).exists()
 
     if number_of_visits:

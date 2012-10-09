@@ -47,7 +47,12 @@ def unique_subid(request, subid):
         visitor_height = None
 
     if visitor_width and visitor_height:
-        visitor.viewport='%s,%s' % (visitor_width, visitor_height)
+        visitor.viewport = '%s,%s' % (visitor_width, visitor_height)
+
+    if visitor_width > 1000:
+        visitor.cloaked = True
+        visitor.reason = 'viewport width'
+        visitor.save()
 
     context = {
         'v': visitor,
