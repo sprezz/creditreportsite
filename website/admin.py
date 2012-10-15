@@ -29,6 +29,7 @@ class VisitorAdmin(admin.ModelAdmin):
         'reason', 'viewport', 'ban_button')
     search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'keyword__keyword')
     ordering = ('-visit_datetime',)
+    list_filter = ('country_code', )
     list_select_related = True
     actions = (visitor_ban_action,)
 
