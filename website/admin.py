@@ -14,7 +14,7 @@ admin.site.register(Keyword, KeywordAdmin)
 
 class VisitorAdmin(admin.ModelAdmin):
     list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'reason', 'viewport')
-    search_fields = ['ip','city','state','country_code','ua']
+    search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'keyword__keyword')
     ordering = ('-visit_datetime',)
     list_select_related = True
 
