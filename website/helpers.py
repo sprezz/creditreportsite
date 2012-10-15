@@ -20,7 +20,7 @@ def generate_subid():
             return subid
 
 def legitimate_visitor(ip, geo_data, v):
-    if IPBan.objects.filter(ip=iptoint(ip)).exists():
+    if ip and IPBan.objects.filter(ip=iptoint(ip)).exists():
         return 'ip'
 
     dt3 = datetime.datetime.now() - datetime.timedelta(days=3)
