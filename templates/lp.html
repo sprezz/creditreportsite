@@ -3,13 +3,8 @@
     <head>
         <meta charset="utf-8">
         <title></title>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript">
-            var $window = $(window),
-                width = $window.width(),
-                height = $window.height();
-
-            window.location = '{{ next }}?w='+width+'&h='+height;
+            window.location = '{{ next }}?w='+screen.width+'&h='+screen.height;
         </script>
     </head>
     <body>
