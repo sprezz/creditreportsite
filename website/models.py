@@ -45,7 +45,7 @@ class Visitor(models.Model):
 
 
 class IPBan(models.Model):
-    ip = models.BigIntegerField(db_index=True)
+    ip = models.BigIntegerField(db_index=True, unique=True)
 
     def __unicode__(self):
         from website.helpers import inttoip
