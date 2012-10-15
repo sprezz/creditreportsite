@@ -62,7 +62,7 @@ def unique_subid(request, subid):
         'redirect_link': random.choice(app_settings.REDIRECT_LINKS),
     }
 
-    if visitor.visit_datetime > day_ago:
+    if visitor.visit_datetime < day_ago:
         visitor.save()
         # One more visit, just showing safe page
         return render_to_response('%s/safe.html' % visitor.lp, context)
