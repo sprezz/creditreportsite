@@ -3,7 +3,7 @@ import random
 import datetime
 import urllib2
 
-from website.models import Visitor
+from website.models import Visitor, IPBan
 from website import settings as app_settings
 
 
@@ -20,7 +20,7 @@ def generate_subid():
             return subid
 
 def legitimate_visitor(ip, geo_data, v):
-    if ip in app_settings.BAD_IPS:
+    if IPBan.objects.filter(ip=iptoint(ip)).exists():
         return 'ip'
 
     dt3 = datetime.datetime.now() - datetime.timedelta(days=3)
@@ -57,3 +57,18 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+def iptoint(ip):
+    hexn = ''.join(["%02X" % long(i) for i in ip.split('.')])
+
+    return long(hexn, 16)
+
+def inttoip(n):
+    d = 256 * 256 * 256
+    q = []
+    while d > 0:
+        m,n = divmod(n,d)
+        q.append(str(m))
+        d = d/256
+
+    return '.'.join(q)

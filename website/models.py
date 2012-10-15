@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class LandingPage(models.Model):
     header_content = models.CharField(max_length=10)
@@ -44,3 +42,11 @@ class Visitor(models.Model):
 
     class Meta:
         ordering = ['-visit_datetime']
+
+
+class IPBan(models.Model):
+    ip = models.BigIntegerField(db_index=True)
+
+    def __unicode__(self):
+        from website.helpers import inttoip
+        return inttoip(self.ip)
