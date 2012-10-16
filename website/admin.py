@@ -3,7 +3,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db import connection
 
-from website.models import Keyword, LandingPage, Visitor, IPBan
+from website.models import Keyword, LandingPage, Visitor, IPBan, OutboundLink
 from website.helpers import iptoint, iptoint
 from website.forms import IPBanAdminForm
 
@@ -86,6 +86,7 @@ class VisitorAdmin(admin.ModelAdmin):
 
 admin.site.register(Visitor, VisitorAdmin)
 
+admin.site.register(OutboundLink)
 admin.site.register(LandingPage)
 
 

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from pygeoip import GeoIP, GeoIPError
 
-from website.models import Keyword, Visitor
+from website.models import Keyword, Visitor, LandingPage
 from website.helpers import generate_subid, legitimate_visitor
 from website import settings as app_settings
 
@@ -59,8 +59,8 @@ def unique_subid(request, subid):
         'logo': visitor.keyword.image.url,
         'bank': visitor.keyword,
         'subid': visitor.text,
-        'redirect_link': random.choice(app_settings.REDIRECT_LINKS),
     }
+
 #
 #    if visitor.visit_datetime > day_ago:
 #        visitor.save()
@@ -79,8 +79,14 @@ def unique_subid(request, subid):
     visitor.ip = ip
     visitor.save()
 
+    lp = LandingPage.objects.get(name=visitor.lp)
+
     if visitor.cloaked:
+        context['redirect_link'] = lp.random_safe_link()
+
         return render_to_response('%s/safe.html' % visitor.lp, context)
+
+    context['redirect_link'] = lp.random_index_link()
 
     return render_to_response('%s/index.html' % visitor.lp, context)
 

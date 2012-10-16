@@ -1,12 +1,35 @@
 from django.db import models
 
 
+class OutboundLink(models.Model):
+    url = models.URLField()
+
+    def __unicode__(self):
+        return self.url
+
+
 class LandingPage(models.Model):
-    header_content = models.CharField(max_length=10)
-    body_content = models.CharField(max_length=10)
-    lp_file = models.CharField(max_length=100)
-    safe_lp_file = models.FileField(upload_to='uploaded_templates')
-    force_safe_lp = models.FileField(upload_to='uploaded_templates', blank=True, null=True)
+    name = models.CharField(max_length=10, help_text='Name of the folder with safe and index.html templates')
+
+    index_links = models.ManyToManyField(OutboundLink, verbose_name='Links for a index page',
+        related_name='lp_index')
+    safe_links = models.ManyToManyField(OutboundLink, verbose_name='Links for a safe page',
+        related_name='lp_safe')
+
+    def __unicode__(self):
+        return self.name
+
+    def random_index_link(self):
+        try:
+            return self.index_links.all().order_by('?')[0]
+        except IndexError:
+            return None
+
+    def random_safe_link(self):
+        try:
+            return self.safe_links.all().order_by('?')[0]
+        except IndexError:
+            return None
 
 
 class Keyword(models.Model):
