@@ -34,8 +34,12 @@ class VisitorAdmin(admin.ModelAdmin):
     actions = (visitor_ban_action,)
 
     def ban_button(self, obj):
-        if IPBan.objects.filter(ip=iptoint(obj.ip)).exists():
-            return '<a href="./%s/unban/">Unban</a>' % obj.id
+        try:
+            if IPBan.objects.filter(ip=iptoint(obj.ip)).exists():
+                return '<a href="./%s/unban/">Unban</a>' % obj.id
+        except ValueError:
+            pass
+
         return '<a href="./%s/ban/">Ban</a>' % obj.id
     ban_button.allow_tags = True
     ban_button.short_description = 'Ban IP'

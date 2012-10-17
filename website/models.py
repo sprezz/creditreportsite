@@ -54,6 +54,7 @@ class Visitor(models.Model):
     text = models.CharField(max_length=20, null=True, blank=True, db_index=True)  # Note the `db_index` parameter
     lp = models.CharField(max_length = 20, null=True, blank=True)
     visit_datetime = models.DateTimeField(db_index=True)
+    visited = models.BooleanField(default=False)
     city = models.CharField(max_length = 20, null=True, blank=True)
     state = models.CharField(max_length = 20, null=True, blank=True)
     country_code = models.CharField(max_length = 20, null=True, blank=True)
