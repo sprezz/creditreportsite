@@ -27,7 +27,7 @@ visitor_ban_action.short_description = 'Ban selected visitors'
 class VisitorAdmin(admin.ModelAdmin):
     list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked',
         'reason', 'viewport', 'ban_button')
-    search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'keyword__keyword')
+    search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'text', 'keyword__keyword')
     ordering = ('-visit_datetime',)
     list_filter = ('country_code', )
     list_select_related = True
