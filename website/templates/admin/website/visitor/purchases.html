@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+
+{% load i18n %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style type="text/css">
+        #result_list {width: 100%;}
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> &rsaquo;
+        <a href="../../../">Website</a> &rsaquo;
+        <a href="../../">Visitors</a> &rsaquo;
+        Upload purchases
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="results">
+        <form action="." method="post">
+            <div>
+                {{ form.text }}
+            </div>
+
+            <div class="help-text">One subid per line</div>
+
+            <input type="submit" value="Upload purchases list">
+        </form>
+    </div>
+
+{% endblock %}

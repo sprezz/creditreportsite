@@ -60,6 +60,7 @@ class Visitor(models.Model):
     country_code = models.CharField(max_length = 20, null=True, blank=True)
     zip_code = models.CharField(max_length = 20, null=True, blank=True)
     cloaked = models.BooleanField()
+    sale = models.BooleanField(default=False)
     reason = models.CharField(max_length=30, null=True, blank=True)
     viewport = models.CharField(max_length=15, null=True, blank=True)
     referer = models.CharField(max_length=255, null=True, blank=True)

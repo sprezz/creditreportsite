@@ -19,3 +19,7 @@ class IPBanAdminForm(forms.ModelForm):
     def clean_ip(self):
         ip = self.cleaned_data.get('ip')
         return iptoint(ip)
+
+
+class PurchasesUploadForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea(attrs={'cols': 50, 'rows': 50}))

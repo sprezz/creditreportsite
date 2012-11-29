@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.conf.urls.defaults import patterns, include, url
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.db import connection
 
 from website.models import Keyword, LandingPage, Visitor, IPBan, OutboundLink
 from website.helpers import iptoint, iptoint
-from website.forms import IPBanAdminForm
+from website.forms import IPBanAdminForm, PurchasesUploadForm
 
 
 class KeywordAdmin(admin.ModelAdmin):
@@ -25,11 +27,11 @@ def visitor_ban_action(modeladmin, request, queryset):
 visitor_ban_action.short_description = 'Ban selected visitors'
 
 class VisitorAdmin(admin.ModelAdmin):
-    list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked',
+    list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'sale',
         'reason', 'viewport', 'ban_button')
     search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'text', 'keyword__keyword')
     ordering = ('-visit_datetime',)
-    list_filter = ('country_code', )
+    list_filter = ('country_code', 'sale')
     list_select_related = True
     actions = (visitor_ban_action,)
 
@@ -49,6 +51,7 @@ class VisitorAdmin(admin.ModelAdmin):
         return patterns('',
             url(r'^(?P<object_id>\d+)/ban/$', self.ban, {'action': True}),
             url(r'^(?P<object_id>\d+)/unban/$', self.ban, {'action': False}),
+            (r'^purchases/$', self.purchases),
             (r'^stats/ip/$', self.stats_ips),
             (r'^stats/ua/$', self.stats_ua),
         ) + urls
@@ -87,6 +90,26 @@ class VisitorAdmin(admin.ModelAdmin):
         }
 
         return render_to_response('admin/website/visitor/stats_ip.html', context)
+
+    def purchases(self, request):
+        if request.POST:
+            form = PurchasesUploadForm(request.POST)
+            if form.is_valid():
+                lines = [x.strip() for x in form.cleaned_data['text'].splitlines()]
+                items_cnt = Visitor.objects.filter(text__in=lines).update(sale=True)
+
+                messages.success(request, 'Purchases list was uploaded successfully. %d visitors was updated.' % items_cnt)
+
+                return HttpResponseRedirect('..')
+
+        else:
+            form = PurchasesUploadForm()
+
+        context = {
+            'form': form,
+        }
+
+        return render_to_response('admin/website/visitor/purchases.html', context)
 
 admin.site.register(Visitor, VisitorAdmin)
 
