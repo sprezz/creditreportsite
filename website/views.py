@@ -1,10 +1,11 @@
+import os.path
 import random
 import datetime
 
 from django.shortcuts import render_to_response, HttpResponse, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from pygeoip import GeoIP, GeoIPError
+from pygeoip import GeoIP, GeoIPError, MEMORY_CACHE
 
 from website.models import Keyword, Visitor, LandingPage
 from website.helpers import generate_subid, legitimate_visitor
@@ -12,6 +13,9 @@ from website import settings as app_settings
 
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
+
+orgs = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPOrg.dat'), MEMORY_CACHE)
+isps = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPISP.dat'), MEMORY_CACHE)
 
 
 def landing_page(request, keyword, lp='lp5'):
@@ -77,6 +81,12 @@ def unique_subid(request, subid):
     visitor.visited = True
 
     visitor.ip = ip
+    if ip:
+        try:
+            visitor.organization = orgs.org_by_addr(ip)
+            visitor.isp = isps.org_by_addr(ip)
+        except GeoIPError:
+            pass
     visitor.save()
 
     lp = LandingPage.objects.get(name=visitor.lp)

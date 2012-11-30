@@ -54,6 +54,8 @@ class VisitorAdmin(admin.ModelAdmin):
             (r'^purchases/$', self.purchases),
             (r'^stats/ip/$', self.stats_ips),
             (r'^stats/ua/$', self.stats_ua),
+            (r'^stats/isp/$', self.stats_isps),
+            (r'^stats/org/$', self.stats_organizations),
         ) + urls
 
     def ban(self, request, object_id, action=None):
@@ -76,6 +78,7 @@ class VisitorAdmin(admin.ModelAdmin):
         cursor.execute('SELECT ip, COUNT(*) AS cnt FROM website_visitor GROUP BY ip ORDER BY cnt DESC LIMIT 100;')
 
         context = {
+            'title': 'IP',
             'ips': cursor.fetchall(),
         }
 
@@ -86,10 +89,34 @@ class VisitorAdmin(admin.ModelAdmin):
         cursor.execute('SELECT ua, COUNT(*) AS cnt FROM website_visitor GROUP BY ua ORDER BY cnt DESC;')
 
         context = {
+            'title': 'User-Agent',
             'ips': cursor.fetchall(),
         }
 
         return render_to_response('admin/website/visitor/stats_ip.html', context)
+
+    def stats_isps(self, request):
+        cursor = connection.cursor()
+        cursor.execute('SELECT isp, COUNT(*) AS cnt FROM website_visitor GROUP BY isp ORDER BY cnt DESC;')
+
+        context = {
+            'title': 'ISP',
+            'ips': cursor.fetchall(),
+        }
+
+        return render_to_response('admin/website/visitor/stats_ip.html', context)
+
+    def stats_organizations(self, request):
+        cursor = connection.cursor()
+        cursor.execute('SELECT organization, COUNT(*) AS cnt FROM website_visitor GROUP BY organization ORDER BY cnt DESC;')
+
+        context = {
+            'title': 'Organization',
+            'ips': cursor.fetchall(),
+        }
+
+        return render_to_response('admin/website/visitor/stats_ip.html', context)
+
 
     def purchases(self, request):
         if request.POST:

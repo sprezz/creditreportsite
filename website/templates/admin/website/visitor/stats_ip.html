@@ -14,7 +14,7 @@
         <a href="/">{% trans 'Home' %}</a> &rsaquo;
         <a href="../../../">Website</a> &rsaquo;
         <a href="../../">Visitors</a> &rsaquo;
-        Visitors IPs
+        Visitors {{ title }}s
     </div>
 {% endblock %}
 
@@ -24,7 +24,7 @@
         <table cellspacing="0" id="result_list">
             <thead>
             <tr>
-                <th scope="col">IP</th>
+                <th scope="col">{{ title }}</th>
                 <th scope="col">Count</th>
             </tr>
             </thead>

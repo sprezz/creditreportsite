@@ -64,6 +64,8 @@ class Visitor(models.Model):
     reason = models.CharField(max_length=30, null=True, blank=True)
     viewport = models.CharField(max_length=15, null=True, blank=True)
     referer = models.CharField(max_length=255, null=True, blank=True)
+    organization = models.CharField(max_length=255, null=True, blank=True)
+    isp = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ['-visit_datetime']
