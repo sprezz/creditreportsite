@@ -1,0 +1,22 @@
+{% extends 'admin/website/visitor/stats_ip.html' %}
+
+{% block table_content %}
+    <table cellspacing="0" id="result_list">
+        <thead>
+        <tr>
+            <th scope="col">{{ title }}</th>
+            <th scope="col">Count</th>
+            <th scope="col">Sales</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ip, cnt, sales in ips %}
+            <tr class="{% cycle 'row1' 'row2' %}">
+                <td>{{ ip }}</td>
+                <td>{{ cnt }}</td>
+                <td>{{ sales }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -28,7 +28,7 @@ visitor_ban_action.short_description = 'Ban selected visitors'
 
 class VisitorAdmin(admin.ModelAdmin):
     list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'sale',
-        'reason', 'viewport', 'ban_button')
+        'reason', 'viewport', 'organization', 'isp', 'ban_button')
     search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'text', 'keyword__keyword')
     ordering = ('-visit_datetime',)
     list_filter = ('country_code', 'sale')
@@ -97,25 +97,25 @@ class VisitorAdmin(admin.ModelAdmin):
 
     def stats_isps(self, request):
         cursor = connection.cursor()
-        cursor.execute('SELECT isp, COUNT(*) AS cnt FROM website_visitor GROUP BY isp ORDER BY cnt DESC;')
+        cursor.execute('SELECT isp, COUNT(*) AS cnt, COUNT(sale) FROM website_visitor GROUP BY isp ORDER BY cnt DESC;')
 
         context = {
             'title': 'ISP',
             'ips': cursor.fetchall(),
         }
 
-        return render_to_response('admin/website/visitor/stats_ip.html', context)
+        return render_to_response('admin/website/visitor/stats_orgs.html', context)
 
     def stats_organizations(self, request):
         cursor = connection.cursor()
-        cursor.execute('SELECT organization, COUNT(*) AS cnt FROM website_visitor GROUP BY organization ORDER BY cnt DESC;')
+        cursor.execute('SELECT organization, COUNT(*) AS cnt, COUNT(sale) FROM website_visitor GROUP BY organization ORDER BY cnt DESC;')
 
         context = {
             'title': 'Organization',
             'ips': cursor.fetchall(),
         }
 
-        return render_to_response('admin/website/visitor/stats_ip.html', context)
+        return render_to_response('admin/website/visitor/stats_orgs.html', context)
 
 
     def purchases(self, request):

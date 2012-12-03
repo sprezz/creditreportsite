@@ -21,6 +21,7 @@
 {% block content %}
 
     <div class="results">
+        {% block table_content %}
         <table cellspacing="0" id="result_list">
             <thead>
             <tr>
@@ -37,6 +38,7 @@
             {% endfor %}
             </tbody>
         </table>
+        {% endblock %}
     </div>
 
 {% endblock %}
