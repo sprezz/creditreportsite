@@ -14,8 +14,8 @@ from website import settings as app_settings
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
 
-orgs = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPOrg.dat'), MEMORY_CACHE)
-isps = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPISP.dat'), MEMORY_CACHE)
+orgs = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPOrg.dat'))
+isps = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPISP.dat'))
 
 
 def landing_page(request, keyword, lp='lp5'):
