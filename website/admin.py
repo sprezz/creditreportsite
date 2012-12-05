@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db import connection
 
-from website.models import Keyword, LandingPage, Visitor, IPBan, OutboundLink
+from website.models import Keyword, LandingPage, Visitor, IPBan, OutboundLink, ISPWhiteList
 from website.helpers import iptoint, iptoint
 from website.forms import IPBanAdminForm, PurchasesUploadForm
 
@@ -148,3 +148,8 @@ class IPBanAdmin(admin.ModelAdmin):
     form = IPBanAdminForm
 
 admin.site.register(IPBan, IPBanAdmin)
+
+class ISPWhiteListAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+admin.site.register(ISPWhiteList, ISPWhiteListAdmin)

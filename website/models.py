@@ -48,7 +48,7 @@ class Keyword(models.Model):
 
 
 class Visitor(models.Model):
-    ip = models.CharField(max_length = 20)
+    ip = models.CharField(max_length = 20, db_index=True)
     ua = models.CharField(max_length = 100)
     keyword = models.ForeignKey(Keyword)
     text = models.CharField(max_length=20, null=True, blank=True, db_index=True)  # Note the `db_index` parameter
@@ -77,3 +77,11 @@ class IPBan(models.Model):
     def __unicode__(self):
         from website.helpers import inttoip
         return inttoip(self.ip)
+
+
+class ISPWhiteList(models.Model):
+    name = models.CharField(max_length=100, db_index=True, unique=True)
+
+    def __unicode__(self):
+        return self.name
+

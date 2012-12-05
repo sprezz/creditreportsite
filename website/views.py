@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from pygeoip import GeoIP, GeoIPError, MEMORY_CACHE
 
-from website.models import Keyword, Visitor, LandingPage
+from website.models import Keyword, Visitor, LandingPage, ISPWhiteList
 from website.helpers import generate_subid, legitimate_visitor
 from website import settings as app_settings
 
@@ -81,12 +81,19 @@ def unique_subid(request, subid):
     visitor.visited = True
 
     visitor.ip = ip
-    if ip:
-        try:
-            visitor.organization = orgs.org_by_addr(ip)
-            visitor.isp = isps.org_by_addr(ip)
-        except GeoIPError:
-            pass
+    try:
+        visitor.organization = orgs.org_by_addr(ip)
+    except GeoIPError:
+        pass
+
+    try:
+        visitor.isp = isps.org_by_addr(ip)
+    except GeoIPError:
+        pass
+
+    if not ISPWhiteList.objects.filter(name=visitor.isp).exists():
+        visitor.cloaked = True
+
     visitor.save()
 
     lp = LandingPage.objects.get(name=visitor.lp)
