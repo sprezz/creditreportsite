@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from django.core.management import BaseCommand
+from django.db import IntegrityError
 
 from website.models import Visitor, ISPWhiteList
 
@@ -15,4 +16,7 @@ class Command(BaseCommand):
         for i, name in enumerate(new_isp_name_list):
             print(i, name)
             if name:
-                ISPWhiteList.objects.create(name=name)
+                try:
+                    ISPWhiteList.objects.create(name=name)
+                except IntegrityError:
+                    pass
