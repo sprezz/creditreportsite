@@ -1,5 +1,7 @@
 from django.db import models
 
+import config
+
 
 class OutboundLink(models.Model):
     url = models.URLField()

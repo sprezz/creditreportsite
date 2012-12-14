@@ -19,6 +19,7 @@ def generate_subid():
         if not Visitor.objects.filter(text=subid).exists():
             return subid
 
+
 def legitimate_visitor(ip, geo_data, v):
     if ip and IPBan.objects.filter(ip=iptoint(ip)).exists():
         return 'ip'
@@ -41,6 +42,7 @@ def legitimate_visitor(ip, geo_data, v):
 
     return ''
 
+
 def is_server(ip):
     """Check if IP has its own web-server"""
 
@@ -50,6 +52,7 @@ def is_server(ip):
         return False
     return True
 
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -58,17 +61,19 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+
 def iptoint(ip):
     hexn = ''.join(["%02X" % long(i) for i in ip.split('.')])
 
     return long(hexn, 16)
 
+
 def inttoip(n):
     d = 256 * 256 * 256
     q = []
     while d > 0:
-        m,n = divmod(n,d)
+        m, n = divmod(n,d)
         q.append(str(m))
-        d = d/256
+        d /= 256
 
     return '.'.join(q)

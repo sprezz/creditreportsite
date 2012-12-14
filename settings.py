@@ -7,7 +7,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Serj Zavadsky', 'fevral13@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'south',
+    'livesettings',
 
     'creditreportsite.app1',
     'creditreportsite.website',
@@ -151,7 +152,12 @@ LOGGING = {
     }
 }
 
+import logging
+logging.getLogger('keyedcache').setLevel(logging.INFO)
+
 GEOIP_DB_PATH = os.path.join(PROJECT_ROOT, 'GeoLiteCity.dat')
 SEND_BROKEN_LINK_EMAILS = True
+
+EMAIL_SUBJECT_PREFIX = '[creditreportsite] '
 
 from settings_local import *

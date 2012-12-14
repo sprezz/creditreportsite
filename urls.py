@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url('^s/(\w+)/$', 'website.views.unique_subid'),
 
     url('^ipdetails', 'website.views.ip_details'),
+    url(r'^settings/', include('livesettings.urls')),
 
 )
 
