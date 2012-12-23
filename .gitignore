@@ -2,5 +2,5 @@
 *_local.py
 *.pyc
 Thumbs.db
-media/
+
 .venv

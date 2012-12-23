@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <script language="JavaScript">alert ("Dear {{ bank.text }} Customers: Our records indicate that you have not yet viewed your (3) Credit Scores. Please note that the last day to claim is today.");</script>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{ bank.text }} | Credit Check</title>
+<style type="text/css">
+<!--
+body {
+	margin: 0px;
+	padding: 0px;
+}
+#container {
+	height: 450px;
+	width: 750px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+}
+#disclaimer {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #999;
+	height: 40px;
+	width: 700px;
+	margin-top: 40px;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+#headline {
+	height: 50px;
+	text-align: center;
+	font-size: 28px;
+	font-family: arial;
+	font-weight: 900;
+	color: #F00;
+}
+#logo {
+	height: 60px;
+	background-image: url({{ logo }});
+	background-repeat: no-repeat;
+	background-position: 10px center;
+}
+#space1 {
+	height: 5px;
+}
+#line1 {
+	height: 40px;
+	text-align: center;
+	font-family: arial;
+	font-size: 14px;
+}
+#line2 {
+	height: 25px;
+	text-align: center;
+	font-family: arial;
+	font-size: 18px;
+}
+#line3  {
+	text-align: center;
+	font-family: arial;
+	font-size: 18px;
+	height: 60px;
+}
+#line4 {
+	height: 10px;
+	width: 500px;
+	margin-left: 55px;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: arial;
+	text-decoration: underline;
+}
+#line5 {
+	height: 50px;
+	width: 600px;
+	margin-left: 15px;
+	font-family: arial;
+	font-size: 16px;
+}
+#cta {
+	height: 42px;
+	width: 475px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 30px;
+	text-align: center;
+}
+#footerspace {
+	height: 15px;
+}
+#footer {
+	height: 52px;
+	width: 642px;
+	margin-right: auto;
+	margin-left: auto;
+}
+#cta a img {
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+#container #cta a img {
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+-->
+</style>
+</head>
+
+<body>
+<div id="container">
+  <div id="logo"></div>
+  <div id="space1"></div>
+<div id="headline">Special Notice for {{ bank.text }} Customers:</div>
+<div id="line1"> For a short time, we are offering <strong>{{ bank.domain }} </strong>customers a Free Credit Check.</div>
+<div id="line2">Your Complimentary Annual Credit Score Check is available</div>
+<div id="line3">today (<script>
+
+/*Current date script credit: 
+JavaScript Kit (www.javascriptkit.com)
+Over 200+ free scripts here!
+*/
+
+var mydate=new Date()
+var year=mydate.getYear()
+if (year < 1000)
+year+=1900
+var day=mydate.getDay()
+var month=mydate.getMonth()
+var daym=mydate.getDate()
+if (daym<10)
+daym="0"+daym
+var dayarray=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+var montharray=new Array("January","February","March","April","May","June","July","August","September","October","November","December")
+document.write("<small><font color='000000' face='Arial'><b>"+dayarray[day]+", "+montharray[month]+" "+daym+", "+year+"</b></font></small>")
+
+</script>), get a FREE Credit Score from all 3 Credit Bureaus.</div>
+<div id="line4">Why Do I Need My Credit Check?</div>
+<div id="line5">
+  <ul>
+    <li>Ensure that the information on your Credit Report is accurate and up-to-date.</li>
+    <li>Find out if anyone else has viewed your Credit Report.</li>
+    <li>See how your Credit Score affects your eligibility and loan terms.</li>
+  </ul>
+</div>
+<div id="cta"><a href="{{ redirect_link }}{{ subid }}"><img src="/media/images/ctagreen.gif" width="450" height="42" /></a></div>
+<div id="footerspace"></div>
+<div id="footer"><img src="/media/images/3credit.PNG" width="642" height="51" /></div>
+</div>
+<div id="disclaimer"> Copyright 2012 We are not affiliated nor partnered with the above named institution, with any financial institution or credit agency, or any site you have just visited. See offer for details. </div>
+<input type="hidden" id="hidLocation" value="{{ redirect_link }}{{ subid }}" />
+<script type="text/javascript" src="http://cpabear.com/cpv/landing.js"></script>
+</body>
+</html>
