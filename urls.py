@@ -1,36 +1,30 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.conf import settings
 
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url('^hello/', 'app1.views.hello'),
-    url('^$', 'app1.views.blah'),
-    url('^time/$', 'app1.views.current_datetime'),
-    url(r'^time/plus/(\d{1,2})/$', 'app1.views.hours_ahead'),
-
-    #From new views
-    url('^(?:cr|creditscore|creditreport)/(\w+)/$', 'website.views.landing_page'),
-    url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/$', 'website.views.landing_page'),
-    url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/index.html$', 'website.views.landing_page'),
-    #Unique subid
-    url('^s/(\w+)/$', 'website.views.unique_subid'),
-
-    url('^ipdetails', 'website.views.ip_details'),
     url(r'^settings/', include('livesettings.urls')),
+)
 
+urlpatterns += patterns('website.views',
+    #From new views
+    url('^(?:cr|creditscore|creditreport)/(\w+)/$', 'landing_page'),
+    url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/$', 'landing_page'),
+    url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/index.html$', 'landing_page'),
+
+    #Unique subid
+    url('^s/(\w+)/$', 'unique_subid'),
+
+    url('^ipdetails', 'ip_details'),
 )
 
 if settings.DEBUG:
-    urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    urlpatterns += patterns('django.views.static',
+        url(r'^media/(?P<path>.*)$', 'serve', {'document_root': settings.MEDIA_ROOT}),
+        url(r'^static/(?P<path>.*)$', 'serve', {'document_root': settings.STATIC_ROOT}),
     )
