@@ -28,14 +28,13 @@ def landing_page(request, keyword, lp='lp5'):
 
     context = {
         'subid': subid,
-        'next': reverse('website.views.unique_subid', args=[subid,]),
+        'next': reverse('website.views.unique_subid', args=[subid, ]),
     }
 
     return render_to_response('lp.html', context)
 
 
 def unique_subid(request, subid):
-
     visitor = get_object_or_404(Visitor, text=subid)
 
     ip = request.META.get('HTTP_X_REAL_IP', '')
@@ -65,7 +64,7 @@ def unique_subid(request, subid):
         'subid': visitor.text,
     }
 
-    day_ago = datetime.datetime.now()-datetime.timedelta(days=1)
+    day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
 
     if visitor.visited and visitor.visit_datetime > day_ago:
         visitor.save()
@@ -73,7 +72,8 @@ def unique_subid(request, subid):
         return render_to_response('%s/safe.html' % visitor.lp, context)
 
     # First hit in a day
-    if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
+    if visitor.country_code in (
+    'EG', 'NL'):  # Allow Egypt and Netherlands always
         visitor.cloaked = False
         visitor.reason = ''
 
@@ -93,7 +93,8 @@ def unique_subid(request, subid):
         pass
 
     isp_filter_enabled = config_value('website', 'ENABLE_ISP_FILTER')
-    if isp_filter_enabled and not ISPWhiteList.objects.filter(name=visitor.isp).exists():
+    if isp_filter_enabled and not ISPWhiteList.objects.filter(
+        name=visitor.isp).exists():
         visitor.cloaked = True
 
     visitor.save()
@@ -112,7 +113,7 @@ def unique_subid(request, subid):
 
 def ip_details(request):
     # TODO: Shouldn't real IP be used here?
-    ip =  request.META.get('HTTP_X_REAL_IP', '')
+    ip = request.META.get('HTTP_X_REAL_IP', '')
     ip = request.META['REMOTE_ADDR']
     ip = '93.174.93.224'
     geo_data = geoip.record_by_addr(ip)
@@ -124,7 +125,7 @@ def save_visitor(request, keyword_text, lp):
     v = Visitor()
     v.visit_datetime = datetime.datetime.now()
     v.ip = request.META.get('HTTP_X_REAL_IP', '')
-    v.ua = request.META['HTTP_USER_AGENT'][:100]
+    v.ua = request.META.get('HTTP_USER_AGENT', '')[:100]
     keyword = get_object_or_404(Keyword, keyword=keyword_text)
     v.keyword = keyword
     v.lp = lp
@@ -136,10 +137,10 @@ def save_visitor(request, keyword_text, lp):
     if geo_data is None:
         geo_data = {}
 
-    v.city = geo_data.get('city','').lower()
-    v.state = geo_data.get('region_name','')
-    v.country_code = geo_data.get('country_code','')
-    v.zip_code = geo_data.get('postal_code','')
+    v.city = geo_data.get('city', '').lower()
+    v.state = geo_data.get('region_name', '')
+    v.country_code = geo_data.get('country_code', '')
+    v.zip_code = geo_data.get('postal_code', '')
 
     v.reason = legitimate_visitor(v.ip, geo_data, v)
     if v.reason: #Reason to cloak
