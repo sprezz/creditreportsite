@@ -125,7 +125,6 @@ INSTALLED_APPS = (
     'south',
     'livesettings',
 
-    'creditreportsite.app1',
     'creditreportsite.website',
 )
 
