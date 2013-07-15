@@ -37,7 +37,7 @@ def landing_page(request, keyword, lp='lp5'):
 def unique_subid(request, subid):
     visitor = get_object_or_404(Visitor, text=subid)
 
-    ip = request.META.get('HTTP_X_REAL_IP', '')
+    ip = request.META.get('REMOTE_ADDR', '')
 
     try:
         visitor_width = int(request.GET.get('w'))
@@ -113,7 +113,6 @@ def unique_subid(request, subid):
 
 def ip_details(request):
     # TODO: Shouldn't real IP be used here?
-    ip = request.META.get('HTTP_X_REAL_IP', '')
     ip = request.META['REMOTE_ADDR']
     ip = '93.174.93.224'
     geo_data = geoip.record_by_addr(ip)
@@ -124,7 +123,7 @@ def ip_details(request):
 def save_visitor(request, keyword_text, lp):
     v = Visitor()
     v.visit_datetime = datetime.datetime.now()
-    v.ip = request.META.get('HTTP_X_REAL_IP', '')
+    v.ip = request.META.get('REMOTE_ADDR', '')
     v.ua = request.META.get('HTTP_USER_AGENT', '')[:100]
     keyword = get_object_or_404(Keyword, keyword=keyword_text)
     v.keyword = keyword
