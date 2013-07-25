@@ -24,6 +24,7 @@ def landing_page(request, keyword, lp='lp5'):
     visitor = save_visitor(request, keyword, lp)
     visitor.text = subid
     visitor.referer = request.META.get('HTTP_REFERER', '')
+    visitor.query_string = request.META.get('QUERY_STRING', '')
     visitor.save()
 
     context = {
@@ -62,6 +63,7 @@ def unique_subid(request, subid):
         'logo': visitor.keyword.image.url,
         'bank': visitor.keyword,
         'subid': visitor.text,
+        'query': visitor.query_string
     }
 
     day_ago = datetime.datetime.now() - datetime.timedelta(days=1)

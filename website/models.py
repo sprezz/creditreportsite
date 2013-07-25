@@ -68,6 +68,7 @@ class Visitor(models.Model):
     referer = models.CharField(max_length=255, null=True, blank=True)
     organization = models.CharField(max_length=255, null=True, blank=True)
     isp = models.CharField(max_length=255, null=True, blank=True)
+    query_string = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['-visit_datetime']
