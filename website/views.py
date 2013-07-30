@@ -1,3 +1,4 @@
+from urlparse import parse_qs
 from livesettings import config_value
 import os.path
 import random
@@ -64,7 +65,7 @@ def unique_subid(request, subid):
         'bank': visitor.keyword,
         'subid': visitor.text,
         'query_string': visitor.query_string,
-        'query': request.GET
+        'query': dict([(k, v[0]) for k, v in parse_qs(visitor.query_string).items()])
     }
 
     day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
