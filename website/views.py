@@ -63,7 +63,8 @@ def unique_subid(request, subid):
         'logo': visitor.keyword.image.url,
         'bank': visitor.keyword,
         'subid': visitor.text,
-        'query': visitor.query_string
+        'query_string': visitor.query_string,
+        'query': request.GET
     }
 
     day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
