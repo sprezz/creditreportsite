@@ -33,12 +33,14 @@ def legitimate_visitor(ip, geo_data, v):
         return 'visted already'
     if another_bank:
         return 'another bank'
-    if geo_data.get('city','').lower() in app_settings.CITIES:
+    if geo_data.get('city', '').lower() in app_settings.CITIES:
         return 'city'
-    if geo_data.get('region_name','').lower() in app_settings.STATES:
+    if geo_data.get('region_name', '').lower() in app_settings.STATES:
         return 'region_name'
-    if not geo_data.get('country_code','').lower() in app_settings.ALLOWED_COUNTRY:
+    if not geo_data.get('country_code', '').lower() in app_settings.ALLOWED_COUNTRY:
         return 'country_code'
+    if geo_data.get('country_code', '').upper() != v.keyword.country:
+        return 'wrong bank country_code'
 
     return ''
 

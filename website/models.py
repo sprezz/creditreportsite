@@ -3,6 +3,17 @@ from django.db import models
 import config
 
 
+US = 'US'
+UK = 'UK'
+UA = 'UA'
+
+COUNTRY_CHOICES = (
+    (US, US),
+    (UK, UK),
+    (UA, UA),
+)
+
+
 class OutboundLink(models.Model):
     url = models.URLField()
 
@@ -39,6 +50,7 @@ class Keyword(models.Model):
     image = models.ImageField('bank logo', upload_to='images')
     text = models.CharField('bank text', max_length=20)
     domain = models.CharField('bank domain', max_length=20)
+    country = models.CharField(max_length=2, default=US, choices=COUNTRY_CHOICES)
 
     def __unicode__(self):
         return self.keyword

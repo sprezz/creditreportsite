@@ -16,4 +16,5 @@ STATES = (
 ALLOWED_COUNTRY = (
     'us',
     'ua',
+    'uk'
 )
