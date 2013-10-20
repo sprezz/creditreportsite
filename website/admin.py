@@ -11,7 +11,8 @@ from website.forms import IPBanAdminForm, PurchasesUploadForm
 
 
 class KeywordAdmin(admin.ModelAdmin):
-    list_display = ('keyword', 'text', 'domain', 'logo')
+    list_display = ('keyword', 'text', 'domain', 'logo', 'country')
+    list_filter = ('country', )
 
 admin.site.register(Keyword, KeywordAdmin)
 
