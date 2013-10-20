@@ -95,7 +95,7 @@ def unique_subid(request, subid):
 
     visitor.save()
 
-    lp = LandingPage.objects.get(name=visitor.lp, country=visitor.country)
+    lp = LandingPage.objects.get(name=visitor.lp, country=visitor.keyword.country)
 
     if visitor.cloaked:
         context['redirect_link'] = lp.random_safe_link()
