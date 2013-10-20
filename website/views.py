@@ -39,8 +39,6 @@ def landing_page(request, keyword, lp='lp5'):
 def unique_subid(request, subid):
     visitor = get_object_or_404(Visitor, text=subid)
 
-    ip = request.META.get('REMOTE_ADDR', '')
-
     try:
         visitor_width = int(request.GET.get('w'))
     except (TypeError, ValueError):
@@ -54,11 +52,6 @@ def unique_subid(request, subid):
     if visitor_width and visitor_height:
         visitor.viewport = '%s,%s' % (visitor_width, visitor_height)
 
-    #if visitor_width > 1000:
-    #    visitor.cloaked = True
-    #    visitor.reason = 'viewport width'
-    #    visitor.save()
-
     context = {
         'v': visitor,
         'logo': visitor.keyword.image.url,
@@ -71,13 +64,14 @@ def unique_subid(request, subid):
     day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
 
     if visitor.visited and visitor.visit_datetime > day_ago:
+        visitor.cloaker = True
+        visitor.reason = 'already visited less than day ago'
         visitor.save()
         # One more visit, just showing safe page
-        return render_to_response('%s/safe.html' % visitor.lp, context)
+        return render_to_response('{}/{}/safe.html'.format(visitor.country, visitor.lp), context)
 
     # First hit in a day
-    if visitor.country_code in (
-    'EG', 'NL'):  # Allow Egypt and Netherlands always
+    if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
         visitor.cloaked = False
         visitor.reason = ''
 
@@ -85,43 +79,39 @@ def unique_subid(request, subid):
 
     visitor.visited = True
 
-    visitor.ip = ip
     try:
-        visitor.organization = orgs.org_by_addr(ip)
+        visitor.organization = orgs.org_by_addr(visitor.ip)
     except GeoIPError:
         pass
 
     try:
-        visitor.isp = isps.org_by_addr(ip)
+        visitor.isp = isps.org_by_addr(visitor.ip)
     except GeoIPError:
         pass
 
     isp_filter_enabled = config_value('website', 'ENABLE_ISP_FILTER')
-    if isp_filter_enabled and not ISPWhiteList.objects.filter(
-        name=visitor.isp).exists():
+    if isp_filter_enabled and not ISPWhiteList.objects.filter(name=visitor.isp).exists():
         visitor.cloaked = True
 
     visitor.save()
 
-    lp = LandingPage.objects.get(name=visitor.lp)
+    lp = LandingPage.objects.get(name=visitor.lp, country=visitor.country)
 
     if visitor.cloaked:
         context['redirect_link'] = lp.random_safe_link()
-
-        return render_to_response('%s/safe.html' % visitor.lp, context)
-
-    context['redirect_link'] = lp.random_index_link()
-
-    return render_to_response('%s/index.html' % visitor.lp, context)
+        return render_to_response('{}/{}/safe.html'.format(visitor.country, visitor.lp), context)
+    else:
+        context['redirect_link'] = lp.random_index_link()
+        return render_to_response('{}/{}/index.html'.format(visitor.country, visitor.lp), context)
 
 
-def ip_details(request):
+def ip_details(request):#{{{
     # TODO: Shouldn't real IP be used here?
     ip = request.META['REMOTE_ADDR']
     ip = '93.174.93.224'
     geo_data = geoip.record_by_addr(ip)
 
-    return HttpResponse(geo_data.items())
+    return HttpResponse(geo_data.items())#}}}
 
 
 def save_visitor(request, keyword_text, lp):

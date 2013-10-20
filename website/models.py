@@ -14,15 +14,16 @@ COUNTRY_CHOICES = (
 )
 
 
-class OutboundLink(models.Model):
+class OutboundLink(models.Model):#{{{
     url = models.URLField()
 
     def __unicode__(self):
-        return self.url
+        return self.url#}}}
 
 
 class LandingPage(models.Model):
     name = models.CharField(max_length=10, help_text='Name of the folder with safe and index.html templates')
+    country = models.CharField(max_length=2, default=US, choices=COUNTRY_CHOICES)
 
     index_links = models.ManyToManyField(OutboundLink, verbose_name='Links for a index page',
         related_name='lp_index')
@@ -86,17 +87,17 @@ class Visitor(models.Model):
         ordering = ['-visit_datetime']
 
 
-class IPBan(models.Model):
+class IPBan(models.Model):#{{{
     ip = models.BigIntegerField(db_index=True, unique=True)
 
     def __unicode__(self):
         from website.helpers import inttoip
-        return inttoip(self.ip)
+        return inttoip(self.ip)#}}}
 
 
-class ISPWhiteList(models.Model):
+class ISPWhiteList(models.Model):#{{{
     name = models.CharField(max_length=100, db_index=True, unique=True)
 
     def __unicode__(self):
-        return self.name
+        return self.name#}}}
 
