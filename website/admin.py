@@ -142,7 +142,13 @@ class VisitorAdmin(admin.ModelAdmin):
 admin.site.register(Visitor, VisitorAdmin)
 
 admin.site.register(OutboundLink)
-admin.site.register(LandingPage)
+
+
+class LandingPageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'country')
+    list_filter('country', )
+
+admin.site.register(LandingPage, LandingPageAdmin)
 
 
 class IPBanAdmin(admin.ModelAdmin):
