@@ -11,4 +11,5 @@ settings_*.py
 *.json
 shared
 static
-templates/lp*
+templates/landing_pages/*
+tags
