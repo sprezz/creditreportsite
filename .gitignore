@@ -11,3 +11,4 @@ settings_*.py
 *.json
 shared
 static
+templates/lp*
