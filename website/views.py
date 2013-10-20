@@ -68,7 +68,7 @@ def unique_subid(request, subid):
         visitor.reason = 'already visited less than day ago'
         visitor.save()
         # One more visit, just showing safe page
-        return render_to_response('landing_pages/{}/{}/safe.html'.format(visitor.keyword.country, visitor.lp), context)
+        return render_to_response('landing_pages/{0}/{1}/safe.html'.format(visitor.keyword.country, visitor.lp), context)
 
     # First hit in a day
     if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
@@ -99,10 +99,10 @@ def unique_subid(request, subid):
 
     if visitor.cloaked:
         context['redirect_link'] = lp.random_safe_link()
-        return render_to_response('landing_pages/{}/{}/safe.html'.format(visitor.keyword.country, visitor.lp), context)
+        return render_to_response('landing_pages/{0}/{1}/safe.html'.format(visitor.keyword.country, visitor.lp), context)
     else:
         context['redirect_link'] = lp.random_index_link()
-        return render_to_response('landing_pages/{}/{}/index.html'.format(visitor.keyword.country, visitor.lp), context)
+        return render_to_response('landing_pages/{0}/{1}/index.html'.format(visitor.keyword.country, visitor.lp), context)
 
 
 def ip_details(request):#{{{
