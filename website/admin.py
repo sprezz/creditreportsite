@@ -146,7 +146,7 @@ admin.site.register(OutboundLink)
 
 class LandingPageAdmin(admin.ModelAdmin):
     list_display = ('name', 'country')
-    list_filter('country', )
+    list_filter = ('country', )
 
 admin.site.register(LandingPage, LandingPageAdmin)
 
