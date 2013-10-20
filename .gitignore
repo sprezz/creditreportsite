@@ -2,5 +2,11 @@
 *_local.py
 *.pyc
 Thumbs.db
-
+*.ini
+*.sql
+media/
 .venv
+settings_*.py
+*.json
+shared
+static
