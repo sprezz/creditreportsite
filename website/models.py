@@ -49,8 +49,8 @@ class LandingPage(models.Model):
 class Keyword(models.Model):
     keyword = models.CharField('bank keyword', max_length=10, unique=True)
     image = models.ImageField('bank logo', upload_to='images')
-    text = models.CharField('bank text', max_length=20)
-    domain = models.CharField('bank domain', max_length=20)
+    text = models.CharField('bank text', max_length=100)
+    domain = models.CharField('bank domain', max_length=100)
     country = models.CharField(max_length=2, default=US, choices=COUNTRY_CHOICES)
 
     def __unicode__(self):
