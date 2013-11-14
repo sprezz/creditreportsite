@@ -1,11 +1,11 @@
 import random
 import string
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db import models
 
-import config
-from website.helpers import iptoint
+from website.helpers import iptoint, inttoip
 from website import settings as app_settings
+
 
 
 US = 'US'
@@ -97,8 +97,8 @@ class Visitor(models.Model):
                 continue
 
     def is_legitimate(self):
-        dt3 = datetime.datetime.now() - datetime.timedelta(days=3)
-        dt5 = datetime.datetime.now() - datetime.timedelta(days=5)
+        dt3 = datetime.now() - timedelta(days=3)
+        dt5 = datetime.now() - timedelta(days=5)
 
         if self.city.lower() in app_settings.CITIES:
             return 'city'
@@ -122,6 +122,7 @@ class Visitor(models.Model):
 
     def save(self, *args, **kwargs):
         if self.id is None:
+            self.generate_subid()
             self.visit_datetime = datetime.now()
             self.reason = self.is_legitimate()
             self.cloaked = bool(self.reason)
@@ -132,9 +133,6 @@ class IPBan(models.Model):#{{{
     ip = models.BigIntegerField(db_index=True, unique=True)
 
     def __unicode__(self):
-        from website.helpers import inttoip
-
-
         return inttoip(self.ip)#}}}
 
 
