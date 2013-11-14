@@ -115,13 +115,9 @@ def unique_subid(request, subid):
 
     if visitor.cloaked:
         context['redirect_link'] = lp.random_safe_link()
-        if 'subid' in query_dict.keys():
-            context['redirect_link'] += '?subid=%s' % query_dict['subid']
         return render_to_response('landing_pages/{0}/{1}/safe.html'.format(keyword_country.lower(), visitor.lp), context)
     else:
         context['redirect_link'] = lp.random_index_link()
-        if 'subid' in query_dict.keys():
-            context['redirect_link'] += '?subid=%s' % query_dict['subid']
         return render_to_response('landing_pages/{0}/{1}/index.html'.format(keyword_country.lower(), visitor.lp), context)
 
 
