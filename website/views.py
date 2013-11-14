@@ -105,9 +105,8 @@ def unique_subid(request, subid):
     except GeoIPError:
         pass
 
-    #isp_filter_enabled = config_value('website', 'ENABLE_ISP_FILTER')
-    #if isp_filter_enabled and not ISPWhiteList.objects.filter(name=visitor.isp).exists():
-    #    visitor.cloaked = True
+    if not ISPWhiteList.objects.filter(name=visitor.isp).exists():
+        visitor.cloaked = True
 
     visitor.save()
 
