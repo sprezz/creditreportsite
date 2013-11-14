@@ -27,7 +27,7 @@ def landing_page(request, keyword, lp='lp5'):
     v.lp = lp
 
     try:
-        geo_data = geoip.record_by_addr(str(v.ip))
+        geo_data = geoip.record_by_addr(v.ip)
     except GeoIPError:
         geo_data = {}
     if geo_data is None:
