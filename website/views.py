@@ -1,17 +1,14 @@
 from urlparse import parse_qs
-from livesettings import config_value
-import os.path
-import random
 import datetime
 
-from django.shortcuts import render_to_response, HttpResponse, get_object_or_404
+from livesettings import config_value
+import os.path
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from pygeoip import GeoIP, GeoIPError, MEMORY_CACHE
+from pygeoip import GeoIP, GeoIPError
 
 from website.models import Keyword, Visitor, LandingPage, ISPWhiteList
-from website.helpers import generate_subid, legitimate_visitor
-from website import settings as app_settings
 
 
 geoip = GeoIP(settings.GEOIP_DB_PATH)
@@ -21,23 +18,42 @@ isps = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPISP.dat'))
 
 
 def landing_page(request, keyword, lp='lp5'):
-    subid = generate_subid()
-    visitor = save_visitor(request, keyword, lp)
-    visitor.text = subid
-    visitor.referer = request.META.get('HTTP_REFERER', '')
-    visitor.query_string = request.META.get('QUERY_STRING', '')
-    visitor.save()
+    v = Visitor()
+    v.ip = request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR', '')
+    v.ua = request.META.get('HTTP_USER_AGENT', '')[:100]
+    v.referer = request.META.get('HTTP_REFERER', '')
+    v.query_string = request.META.get('QUERY_STRING', '')
+    v.keyword = get_object_or_404(Keyword, keyword=keyword)
+    v.lp = lp
 
+    try:
+        geo_data = geoip.record_by_addr(str(v.ip))
+    except GeoIPError:
+        geo_data = {}
+    if geo_data is None:
+        geo_data = {}
+
+    v.city = geo_data.get('city', '').lower()
+    v.state = geo_data.get('region_name', '')
+    v.country_code = geo_data.get('country_code', '')
+    v.zip_code = geo_data.get('postal_code', '')
+
+    v.save()
+
+    next_url = reverse('unique_subid', args=[v.text, ])
+    if 'subid' in request.GET:
+        next_url += '?subid=%s' % request.GET['subid']
     context = {
-        'subid': subid,
-        'next': reverse('website.views.unique_subid', args=[subid, ]),
+        'subid': v.text,
+        'next': next_url,
     }
 
-    return render_to_response('lp.html', context)
+    return render(request, 'lp.html', context)
 
 
 def unique_subid(request, subid):
     visitor = get_object_or_404(Visitor, text=subid)
+    keyword_country = visitor.keyword.country
 
     try:
         visitor_width = int(request.GET.get('w'))
@@ -64,11 +80,11 @@ def unique_subid(request, subid):
     day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
 
     if visitor.visited and visitor.visit_datetime > day_ago:
-        visitor.cloaker = True
+        visitor.cloaked = True
         visitor.reason = 'already visited less than day ago'
         visitor.save()
         # One more visit, just showing safe page
-        return render_to_response('landing_pages/{0}/{1}/safe.html'.format(visitor.keyword.country.lower(), visitor.lp), context)
+        return render_to_response('landing_pages/{0}/{1}/safe.html'.format(keyword_country.lower(), visitor.lp), context)
 
     # First hit in a day
     if visitor.country_code in ('EG', 'NL'):  # Allow Egypt and Netherlands always
@@ -80,12 +96,12 @@ def unique_subid(request, subid):
     visitor.visited = True
 
     try:
-        visitor.organization = orgs.org_by_addr(visitor.ip)
+        visitor.organization = orgs.org_by_addr(str(visitor.ip))
     except GeoIPError:
         pass
 
     try:
-        visitor.isp = isps.org_by_addr(visitor.ip)
+        visitor.isp = isps.org_by_addr(str(visitor.ip))
     except GeoIPError:
         pass
 
@@ -95,52 +111,15 @@ def unique_subid(request, subid):
 
     visitor.save()
 
-    lp = LandingPage.objects.get(name=visitor.lp, country=visitor.keyword.country)
+    lp = LandingPage.objects.get(name=visitor.lp, country=keyword_country)
 
     if visitor.cloaked:
         context['redirect_link'] = lp.random_safe_link()
-        return render_to_response('landing_pages/{0}/{1}/safe.html'.format(visitor.keyword.country.lower(), visitor.lp), context)
+        return render_to_response('landing_pages/{0}/{1}/safe.html'.format(keyword_country.lower(), visitor.lp), context)
     else:
         context['redirect_link'] = lp.random_index_link()
-        return render_to_response('landing_pages/{0}/{1}/index.html'.format(visitor.keyword.country.lower(), visitor.lp), context)
+        return render_to_response('landing_pages/{0}/{1}/index.html'.format(keyword_country.lower(), visitor.lp), context)
 
 
-def ip_details(request):#{{{
-    # TODO: Shouldn't real IP be used here?
-    ip = request.META['REMOTE_ADDR']
-    ip = '93.174.93.224'
-    geo_data = geoip.record_by_addr(ip)
-
-    return HttpResponse(geo_data.items())#}}}
-
-
-def save_visitor(request, keyword_text, lp):
-    v = Visitor()
-    v.visit_datetime = datetime.datetime.now()
-    v.ip = request.META.get('REMOTE_ADDR', '')
-    v.ua = request.META.get('HTTP_USER_AGENT', '')[:100]
-    keyword = get_object_or_404(Keyword, keyword=keyword_text)
-    v.keyword = keyword
-    v.lp = lp
-    v.dt = datetime.datetime.now()
-    try:
-        geo_data = geoip.record_by_addr(str(v.ip))
-    except GeoIPError:
-        geo_data = geoip.record_by_addr('71.227.57.247')
-    if geo_data is None:
-        geo_data = {}
-
-    v.city = geo_data.get('city', '').lower()
-    v.state = geo_data.get('region_name', '')
-    v.country_code = geo_data.get('country_code', '')
-    v.zip_code = geo_data.get('postal_code', '')
-
-    v.reason = legitimate_visitor(v.ip, geo_data, v)
-    if v.reason: #Reason to cloak
-        v.cloaked = True
-    else:
-        v.cloaked = False #no need to cloak
-
-    v.save()
-
-    return v
+def fail(request):
+    raise Exception('I always throw 500')

@@ -18,9 +18,10 @@ urlpatterns += patterns('website.views',
     url('^(?:cr|creditscore|creditreport)/(\w+)/(\w+)/index.html$', 'landing_page'),
 
     #Unique subid
-    url('^s/(\w+)/$', 'unique_subid'),
+    url('^s/(\w+)/$', 'unique_subid', name='unique_subid'),
 
-    url('^ipdetails', 'ip_details'),
+    url('^fail/$', 'fail', name='unique_subid'),
+
 )
 
 if settings.DEBUG:
