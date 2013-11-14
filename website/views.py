@@ -68,13 +68,14 @@ def unique_subid(request, subid):
     if visitor_width and visitor_height:
         visitor.viewport = '%s,%s' % (visitor_width, visitor_height)
 
+    query_dict = dict([(k, v[0]) for k, v in parse_qs(visitor.query_string).items()])
     context = {
         'v': visitor,
         'logo': visitor.keyword.image.url,
         'bank': visitor.keyword,
         'subid': visitor.text,
         'query_string': visitor.query_string,
-        'query': dict([(k, v[0]) for k, v in parse_qs(visitor.query_string).items()])
+        'query': query_dict
     }
 
     day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -114,9 +115,13 @@ def unique_subid(request, subid):
 
     if visitor.cloaked:
         context['redirect_link'] = lp.random_safe_link()
+        if 'subid' in query_dict.keys():
+            context['redirect_link'] += '?subid=%s' % query_dict['subid']
         return render_to_response('landing_pages/{0}/{1}/safe.html'.format(keyword_country.lower(), visitor.lp), context)
     else:
         context['redirect_link'] = lp.random_index_link()
+        if 'subid' in query_dict.keys():
+            context['redirect_link'] += '?subid=%s' % query_dict['subid']
         return render_to_response('landing_pages/{0}/{1}/index.html'.format(keyword_country.lower(), visitor.lp), context)
 
 
