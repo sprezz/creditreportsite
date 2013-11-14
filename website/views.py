@@ -19,7 +19,7 @@ isps = GeoIP(os.path.join(settings.PROJECT_ROOT, 'shared', 'GeoIPISP.dat'))
 
 def landing_page(request, keyword, lp='lp5'):
     v = Visitor()
-    v.ip = request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR', '')
+    v.ip = request.META.get('REMOTE_ADDR', '')
     v.ua = request.META.get('HTTP_USER_AGENT', '')[:100]
     v.referer = request.META.get('HTTP_REFERER', '')
     v.query_string = request.META.get('QUERY_STRING', '')
