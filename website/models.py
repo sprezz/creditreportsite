@@ -93,8 +93,9 @@ class Visitor(models.Model):
         while True:
             self.text = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(15)])
 
-            if Visitor.objects.filter(text=self.text).exists():
-                continue
+            if not Visitor.objects.filter(text=self.text).exists():
+                break
+
 
     def is_legitimate(self):
         dt3 = datetime.now() - timedelta(days=3)
