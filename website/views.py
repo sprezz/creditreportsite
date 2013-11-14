@@ -96,12 +96,12 @@ def unique_subid(request, subid):
     visitor.visited = True
 
     try:
-        visitor.organization = orgs.org_by_addr(str(visitor.ip))
+        visitor.organization = orgs.org_by_addr(visitor.ip)
     except GeoIPError:
         pass
 
     try:
-        visitor.isp = isps.org_by_addr(str(visitor.ip))
+        visitor.isp = isps.org_by_addr(visitor.ip)
     except GeoIPError:
         pass
 
