@@ -28,7 +28,7 @@ def visitor_ban_action(modeladmin, request, queryset):
 visitor_ban_action.short_description = 'Ban selected visitors'
 
 class VisitorAdmin(admin.ModelAdmin):
-    list_display = ('visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'sale',
+    list_display = ('text', 'visit_datetime', 'ip', 'city', 'state', 'country_code', 'keyword', 'lp', 'cloaked', 'sale',
         'reason', 'viewport', 'organization', 'isp', 'query_string', 'ban_button')
     search_fields = ('ip', 'city', 'state', 'country_code', 'ua', 'text', 'keyword__keyword')
     ordering = ('-visit_datetime',)
