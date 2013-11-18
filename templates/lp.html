@@ -5,16 +5,15 @@
         <title></title>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript">
-            var next = '{{ next }}',
-                $window = $(window),
+            var $window = $(window),
                 width = $window.width(),
                 height = $window.height();
-            if (!next.endsWith('&')){
-                next += '&';
-            } else {
-                next += '?';
-            }
-            window.location = next + 'w=' + width + '&h=' + height;
+                a = document.createElement('a');
+            a.href = '{{ next }}';
+            a.search += '&w=' + width;
+            a.search += '&h=' + height;
+
+            window.location = a.href;
         </script>
     </head>
     <body>
